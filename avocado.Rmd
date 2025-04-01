@@ -1,0 +1,129 @@
+---
+title: STATS531 Final Project (TBD)
+author: "Yilin Chen, Puzhu Wang, Paul Zhang"
+date: "2025-03-26"
+output: html_document
+---
+
+## The Dataset
+
+### Data Description
+
+```{r}
+library(tseries)
+library(forecast)
+require(knitr)
+
+avocado_data = read.csv("avocado.csv")
+avocado_data$Date = as.Date(avocado_data$Date)
+
+table(avocado_data$region)
+
+```
+The good news is that the dataset includes price data for several regions, including several major metropolitan areas like NYC, Chicago, Philly, as well as the whole US. 
+That being said, we may try choosing the most well-behaved time series from the dataset for our analysis. __I will use the TotalUS data for the conventional avocados in this demo.__
+
+
+```{r}
+get_region_data = function(region, atype, col, dataset = avocado_data) {
+
+    # region: string. The region we are interested in. See the table above for available values.
+    # atype: string. The type of the avocado. Must be either "conventional" or "organic".
+
+    region_data = dataset[dataset$region == region & dataset$type == atype, c("Date", col)]
+    region_data_ordered = region_data[order(region_data$Date), col]
+    region_data_ts = ts(region_data_ordered, start = c(2015, 1), frequency = 52)
+    return(region_data_ts)
+}
+```
+
+- Discoveries
+    + Conventional Avocados have way higher sales than the organic ones
+    + Seasonality at lag 52, which makes perfect sense for weekly data
+```{r}
+us_conv_vol = get_region_data(region = "TotalUS", atype = "conventional", col = "Total.Volume")
+us_org_vol = get_region_data(region = "TotalUS", atype = "organic", col = "Total.Volume")
+summary(us_conv_vol)
+summary(us_org_vol)
+
+
+```
+
+### EDA
+__Check Stationarity__
+```{r, fig.align = "center", fig.dim = c(12, 8)}
+us_conv_price = get_region_data(region = "TotalUS", atype = "conventional", col = "AveragePrice")
+us_conv_logret = diff(log(us_conv_price))[-1]
+
+par(mfrow = c(2, 2))
+plot(us_conv_price, type = "l")
+acf(us_conv_price, lag.max = 100)
+plot(us_conv_logret, type = "l")
+acf(us_conv_logret, lag.max = 100)
+```
+
+__Decomposotion__
+```{r}
+price_decomp = stats::stl(us_conv_price, s.window = "periodic", robust = TRUE)
+plot(price_decomp)
+```
+
+
+## ARIMA Modeling
+### W/O Seasonal Effect
+```{r, echo=FALSE}
+aic_table <- function(data, p_max, d, q_max){
+table <- matrix(NA,(p_max+1),(q_max+1))
+for(p in 0:p_max) {
+for(q in 0:q_max) {
+table[p+1,q+1] <- arima(data,order=c(p,d,q))$aic
+}
+}
+dimnames(table) <- list(paste("AR",0:p_max, sep=""),
+paste("MA",0:q_max,sep=""))
+return(table)
+}
+
+sarima_aic_table <- function(data, p, d, q, P_max, D, Q_max, s) {
+  aic_matrix <- matrix(NA, nrow = P_max + 1, ncol = Q_max + 1)
+  
+  for (P in 0:P_max) {
+    for (Q in 0:Q_max) {
+      fit <- tryCatch({
+        arima(data, order = c(p, d, q),
+              seasonal = list(order = c(P, D, Q), period = s))
+      }, error = function(e) NA)
+      
+      aic_matrix[P + 1, Q + 1] <- fit$aic
+    }
+  }
+  
+  dimnames(aic_matrix) <- list(
+    paste0("SAR", 0:P_max),
+    paste0("SMA", 0:Q_max)
+  )
+  
+  return(aic_matrix)
+}
+
+residual_diagnostics = function(model){ 
+    par(mfrow = c(2, 2))
+    plot(model$residuals, main = "Residuals")
+    acf(model$residuals, main = "ACF, Residuals")
+    plot(density(model$residuals), main = "Density Plot for the Residuals", xlab = "Residuals")
+    qqnorm(model$residuals, pch = 1, frame = FALSE)
+    qqline(model$residuals, col = "steelblue", lwd = 2)
+    Box.test(model$residuals, type = "Ljung-Box")
+}
+
+aic_arima = aic_table(us_conv_price, 4, 1, 4)
+kable(aic_arima, digits=2)
+
+aic_sarima = sarima_aic_table(us_conv_price, 2, 1, 2, 4, 1, 4, 52)
+kable(aic_sarima)
+
+
+```
+Candidates: $SARIMA(2, 1, 2)(P, D, Q)_{52}; SARIMA(3, 1, 3)(D, D, Q)_{52}$
+
+
