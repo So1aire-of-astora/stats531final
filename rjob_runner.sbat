@@ -1,0 +1,50 @@
+#!/bin/bash
+
+#SBATCH --job-name=DEFAULT
+#SBATCH --mail-user=paulzh@umich.edu
+#SBATCH --mail-type=BEGIN,END,FAIL
+ 
+#SBATCH --account=datasci531w25_class
+#SBATCH --partition=standard
+
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=36
+
+## 5GB/cpu is the basic share
+#SBATCH --mem-per-cpu=5GB
+
+## wall time hours:minutes:seconds
+#SBATCH --time=1:00:00
+
+###   Load software modules
+
+module load R
+module list
+
+### ARGS
+R_SCRIPT="model.R"
+
+for arg in "$@"; do
+    case $arg in
+        --script=*)
+            R_SCRIPT="${arg#*=}"
+            shift ;;
+        *)
+            echo "[ERROR] Unknown argument: $arg"
+            exit 1 ;;
+    esac
+done
+
+if [ ! -f "$R_SCRIPT" ]; then
+    echo "[ERROR] File '$R_SCRIPT' not found in $(pwd)"
+    exit 1
+fi
+
+####  Commands your job should run follow this line
+
+echo "Running on $SLURM_JOB_NODELIST"
+echo "Running in $(pwd)"
+
+Rscript --vanilla "$R_SCRIPT"
+

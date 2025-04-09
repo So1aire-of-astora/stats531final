@@ -57,19 +57,19 @@ ncpu_global <- attr(results,"ncpu")
 
 
 
-read_csv("measles_params.csv") |>
+read_csv("params.csv") |>
   bind_rows(results) |>
   filter(is.finite(loglik)) |>
   arrange(-loglik) |>
-  write_csv("measles_params.csv")
+  write_csv("params.csv")
 
-read_csv("measles_params.csv") |>
+read_csv("params.csv") |>
   filter(loglik>max(loglik)-50) |>
-  bind_rows(guesses) |>
+  bind_rows(results) |>
   mutate(type=if_else(is.na(loglik),"guess","result")) |>
   arrange(type) -> all
 
-pairs(~loglik+Beta+eta+rho, data=all, pch=16, cex=0.3,
+pairs(~loglik+b1+b2+b3+eta+rho, data=all, pch=16, cex=0.3,
   col=ifelse(all$type=="guess",grey(0.5),"red"))
 
 
@@ -84,7 +84,7 @@ all |>
     title="poor man's profile likelihood"
   )
 
-read_csv("measles_params.csv") |>
+read_csv("params.csv") |>
   filter(loglik>max(loglik)-20,loglik.se<2) |>
   sapply(range) -> box
 

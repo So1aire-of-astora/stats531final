@@ -17,9 +17,9 @@ NP = 5000; NMIF = 100; NUM_GUESSES = 400; ETA_LOCAL = .2; KERALA_POP = 34530000
 # The code for the SEIR model is developed from https://kingaa.github.io/sbied/pfilter/model.R
 
 covid_data = read.csv("./data/weekly_df.csv")
-covid_data = covid_data[6:119,]
-covid_data$Week_Number = seq(1, 114)
-rownames(covid_data) = NULL
+# covid_data = covid_data[6:119,]
+# covid_data$Week_Number = seq(1, 114)
+# rownames(covid_data) = NULL
 
 seir_step <- Csnippet("
 
@@ -47,9 +47,17 @@ seir_init <- Csnippet("
   H = 0;
 ")
 
+# dmeas <- Csnippet("
+#   lik = dnbinom_mu(reports,k,rho*H,give_log)+1.0e-25;"
+# )
+
 dmeas <- Csnippet("
-  lik = dnbinom_mu(reports,k,rho*H,give_log)+1.0e-25;"
-)
+  if (rho*H <= 0.0) {
+    lik = (give_log) ? -1.0e10 : 0.0;
+  } else {
+    lik = dnbinom_mu(reports, k, rho*H, give_log);
+  }
+")
 
 rmeas <- Csnippet("
   reports = rnbinom_mu(k,rho*H);"
@@ -61,7 +69,7 @@ emeas <- Csnippet("
 
 time_indicators = covariate_table(
   t = covid_data$Week_Number,
-  interval = c(rep(1, 56),
+  interval = c(rep(1, 61),
                    rep(2, 40),
                    rep(3, 18)),
   times = "t")
@@ -87,7 +95,6 @@ read_csv("./data/weekly_df.csv") |>
 
 
 
-# fixed_params <- c(N=KERALA_POP, mu_EI = 1., mu_IR=1.5, k=10)
 # coef(measSIR,names(fixed_params)) <- fixed_params
 
 
@@ -96,6 +103,12 @@ read_csv("./data/weekly_df.csv") |>
 ## What is this 'bake' function?
 ## See https://kingaa.github.io/sbied/pfilter/bake.html
 ## for an explanation.
+
+
+## Sanity Check
+simulate(COVID_SEIR, nsim=1, format = "data.frame") |> head()
+logLik(pfilter(COVID_SEIR, Np=5000)) 
+
 
 bake(file="local_search.rds",{
   foreach(i=1:20,.combine=c,
@@ -128,10 +141,10 @@ bake(file="lik_local.rds",{
   results
 }) -> results
 
-read_csv("measles_params.csv") |>
-  bind_rows(results) |>
-  arrange(-loglik) |>
-  write_csv("measles_params.csv")
+# read_csv("params.csv") |>
+#   bind_rows(results) |>
+#   arrange(-loglik) |>
+#   write_csv("params.csv")
 
 
 
@@ -141,10 +154,14 @@ read_csv("measles_params.csv") |>
 ## GLOBAL SEARCH
 
 runif_design(
-  lower=c(Beta=5,rho=0.2,eta=0),
-  upper=c(Beta=80,rho=0.9,eta=1),
+  lower=c(b1=5, b2=5, b3=5, rho=0.2,eta=0),
+  upper=c(b1=80, b2=80, b3=80, rho=0.9,eta=1),
   nseq=NUM_GUESSES
 ) -> guesses
+
+guesses_full <- t(apply(guesses, 1, function(row) {
+  c(row, N = KERALA_POP, mu_EI = 1., mu_IR = 1.5, k = 10)
+})) |> as.data.frame()
 
 mf1 <- mifs_local[[1]]
 
@@ -169,13 +186,13 @@ bake(file="global_search.rds",
   }) |>
   filter(is.finite(loglik)) -> results
 
-read_csv("measles_params.csv") |>
+read_csv("params.csv") |>
   bind_rows(results) |>
   filter(is.finite(loglik)) |>
   arrange(-loglik) |>
-  write_csv("measles_params.csv")
+  write_csv("params.csv")
 
-read_csv("measles_params.csv") |>
+read_csv("params.csv") |>
   filter(loglik>max(loglik)-20,loglik.se<2) |>
   sapply(range) -> box
 
