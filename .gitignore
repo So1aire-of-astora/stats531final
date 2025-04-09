@@ -1,0 +1,9 @@
+# Ignore cached RDS files
+*.rds
+
+# Ignore all log files
+*.log
+
+# Ignore csv and pdf files
+*.csv 
+*.pdf
