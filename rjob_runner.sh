@@ -46,7 +46,7 @@ fi
   START_TIME=$(date '+%Y-%m-%d %H:%M:%S')
   START_EPOCH=$(date '+%s')
 
-  echo "[INFO] Job started at: $START_TIME" > "$TIME_LOG"
+  echo "[INFO] Job started at $START_TIME" > "$TIME_LOG"
 
   nohup Rscript "$R_SCRIPT" > "$LOG_FILE" 2>&1
   EXIT_CODE=$?
@@ -56,7 +56,7 @@ fi
   RUN_TIME=$((END_EPOCH - START_EPOCH))
 
   {
-    echo "[INFO] Job ended at: $END_TIME"
+    echo "[INFO] Job ended at $END_TIME"
     echo "[INFO] Runtime: $RUN_TIME seconds"
     echo "[INFO] Exit code: $EXIT_CODE"
   } >> "$TIME_LOG"

@@ -1,9 +1,11 @@
+suppressPackageStartupMessages({
 library(tidyverse)
 library(pomp)
 library(foreach)
 library(future)
 library(doFuture)
 library(iterators)
+})
 
 registerDoFuture()
 
@@ -16,7 +18,7 @@ set.seed(1350254336)
 
 ## THE FOLLOWING CODE HAS BEEN MODIFIED TO INCORPORATE TIME-VARYING BETA
 
-ETA = .2; MU_EI = 1.; MU_IR = 1.5; K = 10
+# ETA = .2; MU_EI = 1.; MU_IR = 1.5; K = 10
 
 KERALA_POP = 34530000
 
@@ -24,6 +26,8 @@ KERALA_POP = 34530000
 
 NP = 5000; NMIF = 100; NUM_GUESSES = 400
 # NP = 200; NMIF = 10; NUM_GUESSES = 40
+
+cat("[INFO] Iteration parameters: Np =", NP, " | Nmif =", NMIF, "\n")
 
 # The code for the SEIR model is developed from https://kingaa.github.io/sbied/pfilter/model.R
 
@@ -42,7 +46,10 @@ seir_step <- Csnippet("
   double dN_SE = rbinom(S,1-exp(-Beta*I/N*dt));
   double dN_EI = rbinom(E,1-exp(-mu_EI*dt));
   double dN_IR = rbinom(I,1-exp(-mu_IR*dt));
-  S -= dN_SE;
+
+  double dN_RS = rbinom(R, 1 - exp(-mu_RS*dt));
+
+  S -= dN_SE - dN_RS;
   E += dN_SE - dN_EI;
   I += dN_EI - dN_IR;
   R += dN_IR;
@@ -92,7 +99,10 @@ time_indicators = covariate_table(
 
 ## MODEL INIT
 
-init_params = c(b1=5,b2=20,b3=40,rho=.5, mu_EI=.19,mu_IR=.2,k=K,eta=.1,N=KERALA_POP)
+init_params = c(b1=5,b2=20,b3=35,rho=.5, mu_EI=.19,mu_IR=.2,k=10,eta=.1,N=KERALA_POP)
+
+cat("[INFO] Initial model parameters:\n")
+setNames(sprintf("%.2f", init_params), names(init_params))
 
 covid_data |>
   select(Week_Number,reports=Confirmed) |>
@@ -147,9 +157,9 @@ real_df <- covid_data |>
 
 
 ### A quick sanity check
-ll <- replicate(10, logLik(pfilter(COVID_SEIR, Np = 500))) |>
+ll <- replicate(10, logLik(pfilter(COVID_SEIR, Np = NP))) |>
   logmeanexp(se = TRUE)
-cat("[SAN CHECK] loglik =", round(ll[1], 2), " | SE =", round(ll[2], 4), "\n")
+cat("[INFO] Sanity Check: loglik =", round(ll[1], 2), " | SE =", round(ll[2], 4), "\n")
 
 # fixed_params <- c(N=KERALA_POP, mu_EI = 1., mu_IR=1.5, k=10)
 # coef(measSIR,names(fixed_params)) <- fixed_params
@@ -165,7 +175,7 @@ bake(file="local_search.rds",{
       mif2(
         Np=NP, Nmif=NMIF,
         cooling.fraction.50=0.5,
-        rw.sd=rw_sd(b1=.02,b2=.02,b3=.02, rho=0.02, eta=ivp(0.02)),
+        rw.sd=rw_sd(b1=.01,b2=.02,b3=.02, rho=0.01, eta=ivp(0.02)),
         partrans=parameter_trans(log=c("b1","b2","b3"),logit=c("rho","eta")),
         paramnames=c("b1","b2","b3","rho","eta")
       )
@@ -194,6 +204,22 @@ bake(file="lik_local.rds",{
 #   write_csv("measles_params.csv")
 
 
+(mifs_local |>
+  traces() |>
+  melt() |>
+  ggplot(aes(x=iteration,y=value,group=.L1,color=factor(.L1)))+
+  geom_line()+
+  guides(color="none")+
+  facet_wrap(~name,scales="free_y")) |>
+  ggsave(
+    filename = "./pic/local_search.png",
+    plot = _,
+    width = 8,
+    height = 5,
+    dpi = 300
+  )
+
+cat("[INFO] Local search completed, model dumped to 'local_search.rds'")
 
 ## THE FOLLOWING CODE IS NOT MODIFIED AS OF APR 6 2025
 
@@ -210,7 +236,7 @@ bake(file="lik_local.rds",{
 #   c(row, N = KERALA_POP, mu_EI = 1., mu_IR = 1.5, k = 10)
 # })) |> as.data.frame()
 
-# fixed_params <- tibble(N=KERALA_POP, mu_EI = MU_EI, mu_IR=MU_IR, k=K)
+# fixed_params <- tibble(N=KERALA_POP, mu_EI = MU_EI, mu_IR=MU_IR, k= )
 
 # guesses <- runif_design(
 #   lower = c(b1 = 5, b2 = 5, b3 = 5, rho = 0.2, eta = 0),
