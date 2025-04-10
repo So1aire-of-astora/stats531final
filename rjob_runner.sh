@@ -2,7 +2,6 @@
 
 R_SCRIPT="model.R"
 LOG_FILE="model.log"
-TIME_LOG="timestamp.log"
 CLEAR_RDS="false"
 
 for arg in "$@"; do
@@ -46,9 +45,13 @@ fi
   START_TIME=$(date '+%Y-%m-%d %H:%M:%S')
   START_EPOCH=$(date '+%s')
 
-  echo "[INFO] Job started at $START_TIME" > "$TIME_LOG"
+  {
+    echo "============================================="
+    echo "[INFO] New session started at $START_TIME"
+    echo "============================================="
+  } >> "$LOG_FILE"
 
-  nohup Rscript "$R_SCRIPT" > "$LOG_FILE" 2>&1
+  nohup Rscript "$R_SCRIPT" >> "$LOG_FILE" 2>&1
   EXIT_CODE=$?
 
   END_TIME=$(date '+%Y-%m-%d %H:%M:%S')
@@ -56,10 +59,11 @@ fi
   RUN_TIME=$((END_EPOCH - START_EPOCH))
 
   {
-    echo "[INFO] Job ended at $END_TIME"
     echo "[INFO] Runtime: $RUN_TIME seconds"
     echo "[INFO] Exit code: $EXIT_CODE"
-  } >> "$TIME_LOG"
+    echo "[INFO] ----- End of Session at $END_TIME -----"
+    echo ""
+  } >> "$LOG_FILE"
 
 ) >/dev/null 2>&1 & 
 JOB_PID=$!
