@@ -20,7 +20,7 @@ these info to a log file. You can run the bash script using the following comman
 
 `$ ./rjob_runner.sh --script=your_script.R --log_file=your_logfile.log --clear_rds=true`
 
-into the terminal. For example, to run the local search algorithm, simply use
+For example, to run the local search algorithm, simply use
 
 `$ ./rjob_runner.sh --script=local.R --log_file=seirs_session.log --clear_rds=true`
 
