@@ -16,25 +16,24 @@ plan(multisession, workers = cores)
 
 set.seed(1350254336)
 
-## THE FOLLOWING CODE HAS BEEN MODIFIED TO INCORPORATE TIME-VARYING BETA
-
-# ETA = .2; MU_EI = 1.; MU_IR = 1.5; K = 10
 
 KERALA_POP = 34530000
 
-
-
 NP = 5000; NMIF = 100; NUM_GUESSES = 400
-# NP = 200; NMIF = 10; NUM_GUESSES = 40
+# NP = 200; NMIF = 10; NUM_GUESSES = 40 # debug line
 
 cat("[INFO] Iteration parameters: Np =", NP, " | Nmif =", NMIF, "\n")
+
+interval = c(61, 35, 23) # DO NOT change the first entry. It's the time when the vaccination program started.
+
+cat(sprintf("[INFO] Time interval (in weeks): [1 - %d], [%d - %d], [%d - %d]\n", interval[1], interval[1] + 1, interval[1] + interval[2], 
+    interval[1] + interval[2] + 1, sum(interval)))
+
 
 # The code for the SEIR model is developed from https://kingaa.github.io/sbied/pfilter/model.R
 
 covid_data = read.csv("./data/weekly_df.csv")
-# covid_data = covid_data[6:119,]
-# covid_data$Week_Number = seq(1, 114)
-# rownames(covid_data) = NULL
+
 
 seir_step <- Csnippet("
 
@@ -50,12 +49,12 @@ seir_step <- Csnippet("
   double dN_RS = rbinom(R, 1 - exp(-mu_RS*dt));
 
   S -= dN_SE - dN_RS;
+
   E += dN_SE - dN_EI;
   I += dN_EI - dN_IR;
   R += dN_IR;
   H += dN_IR;
 ")
-
 
 seir_init <- Csnippet("
   S = nearbyint(eta*N);
@@ -64,18 +63,6 @@ seir_init <- Csnippet("
   R = nearbyint((1-eta)*N);
   H = 0;
 ")
-
-# dmeas <- Csnippet("
-#   lik = dnbinom_mu(reports,k,rho*H,give_log)+1.0e-25;"
-# )
-
-# dmeas <- Csnippet("
-#   if (rho*H <= 0.0) {
-#     lik = (give_log) ? -1.0e6 : 1e-6;
-#   } else {
-#     lik = dnbinom_mu(reports, k, rho*H, give_log);
-#   }
-# ")
 
 dmeas <- Csnippet("
   double mean_reports = fmax(rho * H, 1e-5);
@@ -91,15 +78,15 @@ emeas <- Csnippet("
 )
 
 time_indicators = covariate_table(
-  t = covid_data$Week_Number,
-  interval = c(rep(1, 61),
-                   rep(2, 40),
-                   rep(3, 18)),
-  times = "t")
+    t = covid_data$Week_Number,
+    interval = c(rep(1, interval[1]), rep(2, interval[2]), rep(3, interval[3])), 
+    times = "t")
 
 ## MODEL INIT
 
-init_params = c(b1=5,b2=20,b3=35,rho=.5, mu_EI=.19,mu_IR=.2,k=10,eta=.1,N=KERALA_POP)
+init_params = c(b1=5,b2=10,b3=20,rho=.4, mu_EI=1/0.6, mu_IR=1/2, mu_RS = 1/26, k=10,eta=.1,N=KERALA_POP) 
+
+# assumptions: 4-4.5 days of incubation period; 2 weeks of recovery period; 26 weeks of immunity
 
 cat("[INFO] Initial model parameters:\n")
 setNames(sprintf("%.2f", init_params), names(init_params))
@@ -116,31 +103,29 @@ covid_data |>
     emeasure=emeas,
     accumvars="H",
     statenames=c("S", "E","I","R","H"),
-    paramnames=c("b1","b2","b3","mu_EI","mu_IR","eta","rho","k","N"),
+    paramnames=c("b1","b2","b3","mu_EI","mu_IR", "mu_RS", "eta","rho","k","N"),
     params=init_params,
     covar = time_indicators
   ) -> COVID_SEIR
 
 
-### Simulation
+### Simulation based on initial params
 
 sim_df <- simulate(COVID_SEIR, nsim = 1, format = "data.frame") |>
   select(Week_Number, .id, reports) |>
   mutate(source = "Simulated")
 
-# Real data
 real_df <- covid_data |>
   select(Week_Number, Confirmed) |>
   rename(reports = Confirmed) |>
   mutate(source = "Observed")
 
-# # Combine for plotting
 (
   bind_rows(sim_df, real_df) |>
   ggplot(aes(x = Week_Number, y = reports, color = source)) +
   geom_line(linewidth = 1) +
   labs(
-    title = "Simulated vs. Observed Weekly COVID-19 Cases",
+    title = "Simulated vs. Observed Weekly COVID-19 Cases, Init Params",
     x = "Week",
     y = "Reported Cases",
     color = "Data Source"
@@ -148,7 +133,7 @@ real_df <- covid_data |>
   theme_minimal()
   ) |>
   ggsave(
-    filename = "./pic/init.png",
+    filename = "./pic/sim_init.png",
     plot = _,
     width = 8,
     height = 5,
@@ -161,11 +146,12 @@ ll <- replicate(10, logLik(pfilter(COVID_SEIR, Np = NP))) |>
   logmeanexp(se = TRUE)
 cat("[INFO] Sanity Check: loglik =", round(ll[1], 2), " | SE =", round(ll[2], 4), "\n")
 
-# fixed_params <- c(N=KERALA_POP, mu_EI = 1., mu_IR=1.5, k=10)
-# coef(measSIR,names(fixed_params)) <- fixed_params
-
 
 ## LOCAL SEARCH
+step_size = c(b1 = .01, b2=.02, b3 = .02, rho = .002, eta = .02)
+cat("[INFO] Local search initiated.\n")
+cat("[INFO] Step size:\n")
+setNames(sprintf("%.3f", step_size), names(step_size))
 
 bake(file="local_search.rds",{
   foreach(i=1:cores,.combine=c,
@@ -175,7 +161,8 @@ bake(file="local_search.rds",{
       mif2(
         Np=NP, Nmif=NMIF,
         cooling.fraction.50=0.5,
-        rw.sd=rw_sd(b1=.01,b2=.02,b3=.02, rho=0.01, eta=ivp(0.02)),
+        rw.sd=rw_sd(b1=as.numeric(step_size["b1"]), b2=as.numeric(step_size["b2"]), b3=as.numeric(step_size["b3"]), 
+                    rho=as.numeric(step_size["rho"]), eta=ivp(as.numeric(step_size["eta"]))),
         partrans=parameter_trans(log=c("b1","b2","b3"),logit=c("rho","eta")),
         paramnames=c("b1","b2","b3","rho","eta")
       )
@@ -196,13 +183,19 @@ bake(file="lik_local.rds",{
   } -> results
   attr(results,"ncpu") <- nbrOfWorkers()
   results
-}) -> results
+}) -> results_local
 
-# read_csv("measles_params.csv") |>
-#   bind_rows(results) |>
-#   arrange(-loglik) |>
-#   write_csv("measles_params.csv")
+results_local_maxll = results_local |> arrange(desc(loglik)) |> slice(1)
+best_params_local = results_local_maxll |> select(b1:N) |> as.list() |> unlist()
 
+cat("[INFO] Local search completed, model dumped to 'local_search.rds'.\n")
+cat("[INFO] Best parameters:\n")
+setNames(sprintf("%.2f", best_params_local), names(best_params_local))
+
+cat("[INFO] Est. loglik =", round(results_local_maxll["loglik"] |> as.numeric(), 2), " | SE =", 
+    round(results_local_maxll["loglik.se"] |> as.numeric(), 4), "\n")
+
+## Plots for local search
 
 (mifs_local |>
   traces() |>
@@ -219,117 +212,29 @@ bake(file="lik_local.rds",{
     dpi = 300
   )
 
-cat("[INFO] Local search completed, model dumped to 'local_search.rds'")
 
-## THE FOLLOWING CODE IS NOT MODIFIED AS OF APR 6 2025
+COVID_SEIR_local <- COVID_SEIR |> pomp(params = best_params_local)
 
+sim_df_local <- simulate(COVID_SEIR_local, nsim = 1, format = "data.frame") |>
+  select(Week_Number, .id, reports) |>
+  mutate(source = "Simulated")
 
-## GLOBAL SEARCH
-
-# runif_design(
-#   lower=c(b1=5, b2=5, b3=5, rho=0.2,eta=0),
-#   upper=c(b1=80, b2=80, b3=80, rho=0.9,eta=1),
-#   nseq=NUM_GUESSES
-# ) -> guesses
-
-# guesses_full <- t(apply(guesses, 1, function(row) {
-#   c(row, N = KERALA_POP, mu_EI = 1., mu_IR = 1.5, k = 10)
-# })) |> as.data.frame()
-
-# fixed_params <- tibble(N=KERALA_POP, mu_EI = MU_EI, mu_IR=MU_IR, k= )
-
-# guesses <- runif_design(
-#   lower = c(b1 = 5, b2 = 5, b3 = 5, rho = 0.2, eta = 0),
-#   upper = c(b1 = 80, b2 = 80, b3 = 80, rho = 0.9, eta = 1),
-#   nseq = NUM_GUESSES
-# ) |>
-#   as_tibble() |>
-#   bind_cols(fixed_params |>
-#       slice(rep(1, NUM_GUESSES))  # repeat to match number of rows
-#   )
-
-# mf1 <- mifs_local[[1]]
-
-
-# batch_size <- ceiling(nrow(guesses) / cores) # automatically set batch size for higher parallel computing efficiency
-# batched_guesses <- split(guesses, ceiling(seq_len(nrow(guesses)) / batch_size)) # This line is generated by ChatGPT since I need to look up the split function.
-
-# # bake(file="global_search.rds",
-# #   dependson=guesses,{
-# #     foreach(guess = batched_guesses, .combine=rbind,
-# #       .options.future=list(seed=1270401374)
-# #     ) %dopar% {
-
-# #       mf1 |> mif2(params=guess, Nmif = NMIF) -> mf
-      
-# #       replicate(10, mf |> pfilter(Np = NP) |> logLik()) |> logmeanexp(se=TRUE) -> ll
-      
-# #       mf |> coef() |> bind_rows() |> bind_cols(loglik=ll[1], loglik.se=ll[2])
-# #     } -> results
-
-# bake(file="global_search.rds", dependson=guesses, {
-#   foreach(batch = batched_guesses, .combine = bind_rows,
-#           .options.future = list(seed = 1270401374)) %dopar% {
-    
-#     map_dfr(seq_len(nrow(batch)), function(i) {
-#       guess <- batch[i, ]
-
-#       # Convert row to named numeric vector
-#       params <- guess |> unlist() |> as.numeric()
-#       names(params) <- names(guess)
-
-#       mf <- mf1 |> mif2(params = params, Nmif = NMIF)
-
-#       ll <- replicate(10, mf |> pfilter(Np = NP) |> logLik()) |>
-#         logmeanexp(se = TRUE)
-
-#       mf |> coef() |> bind_rows() |> 
-#         bind_cols(loglik = ll[1], loglik.se = ll[2])
-#     })
-#   } -> results
-#     attr(results,"ncpu") <- nbrOfWorkers()
-#     results
-#   }) |> 
-#   filter(is.finite(loglik)) -> results
-
-
-# read_csv("params.csv") |>
-#   bind_rows(results) |>
-#   filter(is.finite(loglik)) |>
-#   arrange(-loglik) |>
-#   filter(loglik>max(loglik)-20,loglik.se<2) |>
-#   sapply(range) -> box
-
-
-# ## PROFILE LIKELIHOOD FOR RHO
-
-# freeze(seed=1196696958,
-#   profile_design(
-#     eta=seq(0.01,0.95,length=NUM_GUESSES/10),
-#     lower=box[1,c("Beta","rho")],
-#     upper=box[2,c("Beta","rho")],
-#     nprof=10, type="runif"
-#   )) -> guesses
-
-
-# mf1 <- mifs_local[[1]]
-# bake(file="rho_profile.rds",
-#   dependson=guesses,{
-#     foreach(guess=iter(guesses,"row"), .combine=rbind,
-#       .options.future=list(seed=2105684752)
-#     ) %dofuture% {
-#       mf1 |>
-#         mif2(params=c(guess, fixed_params),
-#           rw.sd=rw_sd(Beta=0.02,eta=ivp(0.02))) |>
-#         mif2(Nmif=NMIF,cooling.fraction.50=0.3) |>
-#         mif2() -> mf
-#       replicate(
-#         10,
-#         mf |> pfilter(Np=NP) |> logLik()) |>
-#         logmeanexp(se=TRUE) -> ll
-#       mf |> coef() |> bind_rows() |>
-#         bind_cols(loglik=ll[1],loglik.se=ll[2])
-#     } -> results
-#     attr(results,"ncpu") <- nbrOfWorkers()
-#     results
-#   }) -> results
+(
+  bind_rows(sim_df_local, real_df) |>
+  ggplot(aes(x = Week_Number, y = reports, color = source)) +
+  geom_line(linewidth = 1) +
+  labs(
+    title = "Simulated vs. Observed Weekly COVID-19 Cases, Local Search Optimal",
+    x = "Week",
+    y = "Reported Cases",
+    color = "Data Source"
+  ) +
+  theme_minimal()
+  ) |>
+  ggsave(
+    filename = "./pic/sim_local.png",
+    plot = _,
+    width = 8,
+    height = 5,
+    dpi = 300
+  )
