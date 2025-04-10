@@ -30,3 +30,6 @@ you can make the script executable by running
 Please do NOT edit the last flag `--clear_rds=true` for now, since cached *.rds* files may cause issues. (I will fix that later, since it's not a high priority task. --Paul) 
 
 Note that the log will keep the records from all previous runs, unless you empty the log file manually, or just delete it.
+
+### Acknowledgement
+Some R code are borrowed from [STATS 531 course materials](https://ionides.github.io/531w25/). 
