@@ -26,3 +26,472 @@ There were 32 warnings (use warnings() to see them)
 [INFO] Exit code: 0
 [INFO] ----- End of Session at 2025-04-09 23:55:31 -----
 
+=============================================
+[INFO] New session started at 2025-04-10 13:54:22
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 200 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.50"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5782.17  | SE = 0.5328 
+[INFO] Local search initiated.
+[INFO] Step size:
+     b1      b2      b3     rho     eta 
+"0.010" "0.020" "0.020" "0.002" "0.020" 
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "1.88"       "17.55"        "0.05"        "0.02"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.50"        "0.04"       "10.00"        "0.13" "34530000.00" 
+[INFO] Est. loglik = -1889.25  | SE = 0.2538 
+[INFO] Runtime: 618 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 14:04:40 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 14:08:27
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 200 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.50"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5182.27  | SE = 4.7124 
+[INFO] Local search initiated.
+[INFO] Step size:
+     b1      b2      b3     rho     eta 
+"0.010" "0.020" "0.020" "0.002" "0.020" 
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "2.22"        "0.19"        "1.68"        "0.13"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.50"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Est. loglik = -4327.78  | SE = 311.328 
+[INFO] Runtime: 540 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 14:17:27 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 14:19:20
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 100 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.50"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5675.64  | SE = 2.4816 
+[INFO] Local search initiated.
+[INFO] Step size:
+     b1      b2      b3     rho     eta 
+"0.010" "0.020" "0.020" "0.002" "0.020" 
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "1.76"        "0.31"        "0.05"        "0.05"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.50"        "0.04"       "10.00"        "0.14" "34530000.00" 
+[INFO] Est. loglik = -2086.47  | SE = 1.0216 
+[INFO] Runtime: 341 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 14:25:01 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 14:28:11
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 100 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.50"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5675.64  | SE = 2.4816 
+[INFO] Local search initiated.
+[INFO] Step size:
+     b1      b2      b3     rho     eta 
+"0.010" "0.020" "0.020" "0.002" "0.020" 
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "1.71"        "0.33"        "0.04"        "0.05"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.50"        "0.04"       "10.00"        "0.12" "34530000.00" 
+[INFO] Est. loglik = -2094.92  | SE = 1.9983 
+[INFO] Runtime: 328 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 14:33:39 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 14:40:36
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 100 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.62"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5637.59  | SE = 3.2889 
+[INFO] Local search initiated.
+[INFO] Step size:
+     b1      b2      b3     rho     eta 
+"0.010" "0.020" "0.020" "0.002" "0.020" 
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.11"       "65.33"        "0.27"        "0.01"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.62"        "0.04"       "10.00"        "0.12" "34530000.00" 
+[INFO] Est. loglik = -2151.1  | SE = 0.0777 
+[INFO] Runtime: 326 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 14:46:02 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 14:47:37
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 100 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5672.83  | SE = 0.2892 
+[INFO] Local search initiated.
+[INFO] Step size:
+     b1      b2      b3     rho     eta 
+"0.010" "0.020" "0.020" "0.002" "0.020" 
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "1.82"        "6.23"        "0.04"        "0.02"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.12" "34530000.00" 
+[INFO] Est. loglik = -1940.27  | SE = 2.5011 
+[INFO] Runtime: 333 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 14:53:10 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 14:55:57
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 200 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5672.83  | SE = 0.2892 
+[INFO] Local search initiated.
+[INFO] Step size:
+     b1      b2      b3     rho     eta 
+"0.010" "0.020" "0.020" "0.002" "0.020" 
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "1.55"        "0.19"        "0.01"        "0.06"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.12" "34530000.00" 
+[INFO] Est. loglik = -1999.43  | SE = 0.9273 
+[INFO] Runtime: 616 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 15:06:13 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 15:30:42
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 200 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5672.83  | SE = 0.2892 
+[INFO] Local search initiated.
+[INFO] Step size:
+     b1      b2      b3   mu_EI   mu_IR   mu_RS     rho     eta 
+"0.010" "0.020" "0.020" "0.010" "0.010" "0.010" "0.002" "0.020" 
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "1.87"        "1.05"        "0.02"        "0.02"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.14" "34530000.00" 
+[INFO] Est. loglik = -1836.09  | SE = 1.6321 
+[INFO] Runtime: 599 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 15:40:41 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 15:58:22
+=============================================
+[INFO] Iteration parameters: Np = 200  | Nmif = 10 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5674.23  | SE = 1.0313 
+[INFO] Local search initiated.
+[INFO] Step size:
+     b1      b2      b3   mu_EI   mu_IR   mu_RS     rho     eta 
+"0.010" "0.020" "0.020" "0.010" "0.010" "0.010" "0.002" "0.020" 
+Error in { : 
+  task 1 failed - "in ‘mif2’: in ‘rw.sd’: parameters must be referenced by name."
+Calls: bake ... system.time -> freeze -> eval -> eval -> %dopar% -> <Anonymous>
+In addition: There were 16 warnings (use warnings() to see them)
+Timing stopped at: 1.59 0.009 7.183
+Execution halted
+[INFO] Runtime: 10 seconds
+[INFO] Exit code: 1
+[INFO] ----- End of Session at 2025-04-10 15:58:32 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 15:59:17
+=============================================
+[INFO] Iteration parameters: Np = 200  | Nmif = 10 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5674.23  | SE = 1.0313 
+[INFO] Local search initiated.
+[INFO] Step size:
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "2.57"       "10.91"        "8.08"        "0.37"        "1.54" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.06"        "0.00"       "10.00"        "0.08" "34530000.00" 
+[INFO] Est. loglik = -1713.94  | SE = 0.153 
+[INFO] Runtime: 17 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 15:59:34 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 16:04:30
+=============================================
+[INFO] Iteration parameters: Np = 200  | Nmif = 10 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5674.23  | SE = 1.0313 
+[INFO] Local search initiated.
+[INFO] Step size:
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "4.29"       "13.36"        "6.54"        "0.34"        "1.84" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.32"        "0.01"       "10.00"        "0.07" "34530000.00" 
+[INFO] Est. loglik = -1795.26  | SE = 0.0964 
+[INFO] Runtime: 17 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 16:04:47 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 16:05:32
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 200 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5672.83  | SE = 0.2892 
+[INFO] Local search initiated.
+[INFO] Step size:
+     b1      b2      b3   mu_EI   mu_IR   mu_RS     rho     eta 
+"0.010" "0.020" "0.020" "0.005" "0.005" "0.005" "0.002" "0.020" 
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "4.08"       "42.92"       "25.78"        "0.19"        "1.96" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.33"        "0.01"       "10.00"        "0.07" "34530000.00" 
+[INFO] Est. loglik = -1665.29  | SE = 0.0092 
+[INFO] Runtime: 639 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 16:16:11 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 16:18:57
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 200 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5672.83  | SE = 0.2892 
+[INFO] Local search initiated.
+[INFO] Step size:
+     b1      b2      b3   mu_EI   mu_IR   mu_RS     rho     eta 
+"0.010" "0.020" "0.020" "0.005" "0.005" "0.001" "0.002" "0.020" 
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "0.44"        "9.33"       "32.63"        "0.29"        "1.44" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.01"        "0.03"       "10.00"        "0.98" "34530000.00" 
+[INFO] Est. loglik = -1675.7  | SE = 0.1758 
+[INFO] Runtime: 642 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 16:29:39 -----
+
+=============================================
+[INFO] New session started at 2025-04-10 17:04:19
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 200 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5672.83  | SE = 0.2892 
+[INFO] Local search initiated.
+[INFO] Step size:
+rw_sd(b1 = 0.01, b2 = 0.02, b3 = 0.02, mu_EI = 0.005, mu_IR = 0.005, 
+    mu_RS = 0.005, rho = 0.002, eta = ivp(0.02))
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "2.71"      "122.04"       "12.20"        "0.37"        "1.39" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.02"        "0.01"       "10.00"        "0.08" "34530000.00" 
+[INFO] Est. loglik = -1652  | SE = 0.0522 
+[INFO] Runtime: 642 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-10 17:15:01 -----
+
+=============================================
+[INFO] New session started at 2025-04-11 15:05:53
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 200 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.04"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -5672.83  | SE = 0.2892 
+[INFO] Local search initiated.
+[INFO] Step size:
+rw_sd(b1 = 0.01, b2 = 0.02, b3 = 0.02, mu_EI = 0.005, mu_IR = 0.005, 
+    mu_RS = 0, rho = 0.002, eta = ivp(0.02))
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "4.59"       "33.16"       "32.32"        "0.22"        "0.32" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.00"        "0.04"       "10.00"        "0.12" "34530000.00" 
+[INFO] Est. loglik = -1885.38  | SE = 1.3064 
+[INFO] Runtime: 638 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-11 15:16:31 -----
+
+=============================================
+[INFO] New session started at 2025-04-11 15:30:44
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 200 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.02"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -3973.38  | SE = 0.3589 
+[INFO] Local search initiated.
+[INFO] Step size:
+rw_sd(b1 = 0.01, b2 = 0.02, b3 = 0.02, mu_EI = 0.005, mu_IR = 0.005, 
+    mu_RS = 0, rho = 0.002, eta = ivp(0.02))
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "3.63"       "15.82"        "0.00"        "0.06"        "0.29" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.27"        "0.02"       "10.00"        "0.12" "34530000.00" 
+[INFO] Est. loglik = -1527.74  | SE = 0.0532 
+[INFO] Runtime: 940 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-11 15:46:24 -----
+
+=============================================
+[INFO] New session started at 2025-04-11 16:20:03
+=============================================
+[INFO] Iteration parameters: Np = 5000  | Nmif = 200 
+[INFO] Time interval (in weeks): [1 - 61], [62 - 96], [97 - 119]
+[INFO] Initial model parameters:
+           b1            b2            b3           rho         mu_EI 
+       "5.00"       "10.00"       "20.00"        "0.40"        "1.67" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.40"        "0.01"       "10.00"        "0.10" "34530000.00" 
+[INFO] Sanity Check: loglik = -2739.56  | SE = 3.314 
+[INFO] Local search initiated.
+[INFO] Step size:
+rw_sd(b1 = 0.01, b2 = 0.02, b3 = 0.02, mu_EI = 0.005, mu_IR = 0.005, 
+    mu_RS = 0, rho = 0.002, eta = ivp(0.02))
+There were 16 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
+[INFO] Local search completed, model dumped to 'local_search.rds'.
+[INFO] Best parameters:
+           b1            b2            b3           rho         mu_EI 
+       "2.36"       "63.47"        "0.01"        "0.15"        "1.13" 
+        mu_IR         mu_RS             k           eta             N 
+       "0.13"        "0.01"       "10.00"        "0.09" "34530000.00" 
+[INFO] Est. loglik = -1585.72  | SE = 0.0178 
+[INFO] Runtime: 1605 seconds
+[INFO] Exit code: 0
+[INFO] ----- End of Session at 2025-04-11 16:46:48 -----
+

@@ -3,7 +3,7 @@
 ## ARIMA Model
 
 ### Key Findings
-+ Benchmark log likelihood: around -2,100
++ Benchmark log likelihood: around -1,300
 + Outstanding fit
 + Diagnostics check out, except for significant heteroskedasticidy in the residuals. 
 
@@ -11,7 +11,7 @@
 
 ### Key Findings - Local Search
 + Adding the transition from *R* to *S* improves the likelihood of the model.
-+ The log likelihood reaches around -2,000, marginally outperforming the benchmark.
++ The log likelihood reaches around -2,000, still worse than the benchmark.
 + Simulations based on the local search are still shitty though. Check the graphs.
 
 ### Logging Each Run

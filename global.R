@@ -42,7 +42,7 @@ seir_step <- Csnippet("
 seir_init <- Csnippet("
   S = nearbyint(eta*N);
   E = 0;
-  I = 1000;
+  I = 2000;
   R = nearbyint((1-eta)*N);
   H = 0;
 ")
@@ -160,7 +160,7 @@ runif_design(
 ) -> guesses
 
 guesses_full <- t(apply(guesses, 1, function(row) {
-  c(row, N = KERALA_POP, mu_EI = 1., mu_IR = 1.5, k = 10)
+  c(row, N = KERALA_POP, mu_EI = 1., mu_IR = 1.5, mu_RS = 1/26, k = 10)
 })) |> as.data.frame()
 
 mf1 <- mifs_local[[1]]

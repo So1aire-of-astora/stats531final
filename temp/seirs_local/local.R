@@ -84,7 +84,7 @@ time_indicators = covariate_table(
 
 ## MODEL INIT
 
-init_params = c(b1=5,b2=10,b3=20,rho=.4, mu_EI=1/0.6, mu_IR=1/2.5, mu_RS = .01, k=10,eta=.1,N=KERALA_POP) 
+init_params = c(b1=5,b2=10,b3=20,rho=.4, mu_EI=1/0.6, mu_IR=1/2.5, mu_RS = 1/26, k=10,eta=.1,N=KERALA_POP) 
 
 # assumptions: 4-4.5 days of incubation period; 2 weeks of recovery period; 26 weeks of immunity
 
@@ -150,14 +150,14 @@ cat("[INFO] Sanity Check: loglik =", round(ll[1], 2), " | SE =", round(ll[2], 4)
 ## LOCAL SEARCH
 # step_size = c(b1 = .01, b2=.02, b3 = .02, rho = .002, eta = .02)
 step_size = rw_sd(b1 = .01, b2=.02, b3 = .02, mu_EI = .005, mu_IR = .005, 
-              mu_RS = .00, rho = .002, eta = ivp(.02))
+              mu_RS = .005, rho = .002, eta = ivp(.02))
 cat("[INFO] Local search initiated.\n")
 cat("[INFO] Step size:\n")
 # setNames(sprintf("%.3f", step_size), param_names)
 print(step_size@call)
 
 bake(file="local_search.rds",{
-  foreach(i=1:20,.combine=c,
+  foreach(i=1:cores,.combine=c,
     .options.future=list(seed=482947940)
   ) %dopar% {
     COVID_SEIR |>
