@@ -46,9 +46,8 @@ seir_step <- Csnippet("
   double dN_EI = rbinom(E,1-exp(-mu_EI*dt));
   double dN_IR = rbinom(I,1-exp(-mu_IR*dt));
 
-  double dN_RS = rbinom(R, 1 - exp(-mu_RS*dt));
 
-  S -= dN_SE - dN_RS;
+  S -= dN_SE;
 
   E += dN_SE - dN_EI;
   I += dN_EI - dN_IR;
@@ -96,8 +95,8 @@ time_indicators = covariate_table(
 
 ## MODEL INIT
 
-init_params = c(b1=5,b2=10,b3=20,rho=.4, mu_EI=1/0.6, mu_IR=1/2.5, mu_RS = .01, 
-                k1=10, k2=20, k3=40, eta=.1,N=KERALA_POP) 
+init_params = c(b1=5,b2=10,b3=20,rho=.4, mu_EI=1/0.6, mu_IR=1/2.5, 
+                k1=10, k2=10, k3=10, eta=.1,N=KERALA_POP) 
 
 # assumptions: 4-4.5 days of incubation period; 2 weeks of recovery period; 26 weeks of immunity
 
@@ -117,7 +116,7 @@ covid_data |>
     accumvars="H",
     statenames=c("S", "E","I","R","H"),
     # paramnames=c("b1","b2","b3","mu_EI","mu_IR", "mu_RS", "eta","rho","k","N"),
-    paramnames=c("b1","b2","b3","mu_EI","mu_IR", "mu_RS", "eta","rho","k1", "k2", "k3", "N"),
+    paramnames=c("b1","b2","b3","mu_EI","mu_IR", "eta","rho","k1", "k2", "k3", "N"),
     params=init_params,
     covar = time_indicators
   ) -> COVID_SEIR
@@ -164,7 +163,7 @@ cat("[INFO] Sanity Check: loglik =", round(ll[1], 2), " | SE =", round(ll[2], 4)
 ## LOCAL SEARCH
 # step_size = c(b1 = .01, b2=.02, b3 = .02, rho = .002, eta = .02)
 step_size = rw_sd(b1 = .01, b2=.02, b3 = .02, mu_EI = .005, mu_IR = .005, 
-              mu_RS = .00, rho = .002, k1 = .01, k2 = .02, k3 = .02, eta = ivp(.02))
+              rho = .002, k1 = .01, k2 = .01, k3 = .01, eta = ivp(.02))
 cat("[INFO] Local search initiated.\n")
 cat("[INFO] Step size:\n")
 # setNames(sprintf("%.3f", step_size), param_names)
@@ -181,9 +180,8 @@ bake(file="local_search.rds",{
         rw.sd = step_size,
         # partrans=parameter_trans(log=c("b1","b2","b3"),logit=c("rho","eta")),
         # paramnames=c("b1","b2","b3","rho","eta")
-        partrans=parameter_trans(log=c("b1","b2","b3", "k1", "k2", "k3", "mu_EI", "mu_IR",
-        "mu_RS"),logit=c("rho","eta")),
-        paramnames=c("b1","b2","b3", "k1", "k2", "k3", "mu_EI", "mu_IR", "mu_RS", "rho","eta")
+        partrans=parameter_trans(log=c("b1","b2","b3", "k1", "k2", "k3", "mu_EI", "mu_IR"),logit=c("rho","eta")),
+        paramnames=c("b1","b2","b3", "k1", "k2", "k3", "mu_EI", "mu_IR", "rho","eta")
       )
   } -> mifs_local
   attr(mifs_local,"ncpu") <- nbrOfWorkers()
