@@ -100,7 +100,7 @@ time_indicators = covariate_table(
 
 ## MODEL INIT
 
-init_params = c(b1=3, b2=50, b3=20, rho1=.12, rho2 =.4, rho3=.5, mu_EI=1/0.6, mu_IR=1/2.5, mu_RS = .005, 
+init_params = c(b1=3, b2=50, b3=20, rho1=.12, rho2 =.4, rho3=.5, mu_EI=1/0.6, mu_IR=1/2.5, mu_RS = .01, 
                 k1=2.5, k2=4, k3=0.5, eta=.1,N=KERALA_POP) 
 
 # assumptions: 4-4.5 days of incubation period; 2 weeks of recovery period; 26 weeks of immunity
