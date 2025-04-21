@@ -12,8 +12,8 @@ set.seed(1350254336)
 
 KERALA_POP = 34530000
 
-# NP = 5000; NMIF = 200; NUM_GUESSES = 400
-NP = 2000; NMIF = 100; NUM_GUESSES = 40 # debug line
+NP = 5000; NMIF = 200; NUM_GUESSES = 400
+# NP = 2000; NMIF = 100; NUM_GUESSES = 40 # debug line
 
 cat("[INFO] Iteration parameters: Np =", NP, " | Nmif =", NMIF, "\n")
 
@@ -100,7 +100,7 @@ time_indicators = covariate_table(
 
 ## MODEL INIT
 
-init_params = c(b1=3, b2=50, b3=20, rho1=.12, rho2 =.4, rho3=.5, mu_EI=1/0.6, mu_IR=1/2.5, mu_RS = .01, 
+init_params = c(b1=3, b2=50, b3=20, rho1=.12, rho2 =.4, rho3=.5, mu_EI=1/0.6, mu_IR=1/2, mu_RS = .01, 
                 k1=2.5, k2=4, k3=0.5, eta=.1,N=KERALA_POP) 
 
 # assumptions: 4-4.5 days of incubation period; 2 weeks of recovery period; 26 weeks of immunity
@@ -169,7 +169,7 @@ plan(multicore, workers = 36)
 ## LOCAL SEARCH
 # step_size = c(b1 = .01, b2=.02, b3 = .02, rho = .002, eta = .02)
 step_size = rw_sd(b1 = .01, b2=.02, b3 = .02, mu_EI = .005, mu_IR = .005, 
-                  mu_RS = .00, rho1 = .002, rho2 = .002, rho3 = .002, k1 = .01, k2 = .02, k3 = .02, eta = ivp(.02))
+                  mu_RS = .005, rho1 = .002, rho2 = .002, rho3 = .002, k1 = .01, k2 = .02, k3 = .02, eta = ivp(.02))
 cat("[INFO] Local search initiated.\n")
 cat("[INFO] Step size:\n")
 # setNames(sprintf("%.3f", step_size), param_names)
