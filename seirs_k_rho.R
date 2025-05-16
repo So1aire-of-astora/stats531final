@@ -100,8 +100,8 @@ time_indicators = covariate_table(
 
 ## MODEL INIT
 
-init_params = c(b1=3, b2=50, b3=20, rho1=.12, rho2 =.4, rho3=.5, mu_EI=1/0.6, mu_IR=1/2, mu_RS = .01, 
-                k1=2.5, k2=4, k3=0.5, eta=.1,N=KERALA_POP) 
+init_params = c(b1=2.33, b2=3.68, b3=11.4, rho1=.07, rho2 =.51, rho3=.11, mu_EI=1.23, mu_IR=1.17, mu_RS = .005, 
+                k1=1.26, k2=6, k3=2.8, eta=.62,N=KERALA_POP) 
 
 # assumptions: 4-4.5 days of incubation period; 2 weeks of recovery period; 26 weeks of immunity
 
@@ -129,7 +129,7 @@ covid_data |>
 
 ### Simulation based on initial params
 
-sim_df <- simulate(COVID_SEIR, nsim = 1, format = "data.frame") |>
+sim_df <- simulate(COVID_SEIR, nsim = 10, format = "data.frame") |>
   dplyr::select(Week_Number, .id, reports) |>
   mutate(source = "Simulated")
 
@@ -169,7 +169,7 @@ plan(multicore, workers = 36)
 ## LOCAL SEARCH
 # step_size = c(b1 = .01, b2=.02, b3 = .02, rho = .002, eta = .02)
 step_size = rw_sd(b1 = .01, b2=.02, b3 = .02, mu_EI = .005, mu_IR = .005, 
-                  mu_RS = .005, rho1 = .002, rho2 = .002, rho3 = .002, k1 = .01, k2 = .02, k3 = .02, eta = ivp(.02))
+                  mu_RS = .00, rho1 = .002, rho2 = .002, rho3 = .002, k1 = .01, k2 = .02, k3 = .02, eta = ivp(.02))
 cat("[INFO] Local search initiated.\n")
 cat("[INFO] Step size:\n")
 # setNames(sprintf("%.3f", step_size), param_names)
@@ -239,7 +239,7 @@ cat("[INFO] Est. loglik =", round(results_local_maxll["loglik"] |> as.numeric(),
 
 COVID_SEIR_local <- COVID_SEIR |> pomp(params = best_params_local)
 
-sim_df_local <- simulate(COVID_SEIR_local, nsim = 1, format = "data.frame") |>
+sim_df_local <- simulate(COVID_SEIR_local, nsim = 10, format = "data.frame") |>
   select(Week_Number, .id, reports) |>
   mutate(source = "Simulated")
 
